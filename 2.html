@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Gửi anh 💌</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background: linear-gradient(180deg, #fff6f9, #ffe9f0);
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .container { text-align: center; }
+
+    .envelope {
+      position: relative;
+      width: 220px;
+      height: 140px;
+      margin: 0 auto;
+      background: #fff;
+      border: 2px solid #ffd1e1;
+      border-radius: 16px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+      cursor: pointer;
+      background-image: radial-gradient(circle at 20% 20%, #fff0f5 0%, #ffffff 80%);
+      overflow: hidden;
+    }
+
+    .flap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 60%;
+      background: linear-gradient(145deg, #ff6b8a, #ff8da3);
+      clip-path: polygon(0 0, 50% 100%, 100% 0);
+      border-top-left-radius: 16px;
+      border-top-right-radius: 16px;
+      box-shadow: inset 0 -2px 4px rgba(255,255,255,0.5);
+      z-index: 2;
+    }
+
+    .pattern {
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(45deg, rgba(255,182,193,0.15) 0 8px, rgba(255,255,255,0.1) 8px 16px);
+      border-radius: 16px;
+      pointer-events: none;
+    }
+
+    .heart {
+      position: absolute;
+      bottom: 10px;
+      right: 14px;
+      font-size: 18px;
+      color: #ff6b8a;
+      z-index: 3;
+    }
+
+    .letter {
+      position: absolute;
+      bottom: -170px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 190px;
+      background: #fff;
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.15);
+      background-image: linear-gradient(180deg, #fff, #fff4f7);
+      z-index: 1;
+      opacity: 0;
+    }
+
+    .letter h1 {
+      font-size: 18px;
+      margin: 0 0 8px;
+      color: #333;
+    }
+
+    .letter p {
+      font-size: 13px;
+      color: #444;
+      line-height: 1.5;
+    }
+
+    .letter small {
+      display: block;
+      margin-top: 6px;
+      color: #a88;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="envelope" id="envelope">
+      <div class="flap" id="flap"></div>
+      <div class="pattern"></div>
+      <div class="heart">❤</div>
+      <div class="letter" id="letter">
+        <h1>Love Letter</h1>
+        <p><strong>Gửi anh yêu dấu</strong> — khi anh bước qua em lần đầu, cuộc đời em đã trật khỏi quỹ đạo.
+        Từ giây phút ấy em biết mình “ôi thôi chết”, lần này em dính vào tình yêu thật rồi 💗<br>
+        Em yêu anh, cảm ơn anh, và luôn tự hào về anh.<br>
+        Dù có ra sao, em vẫn luôn ở đây — lắng nghe, chia sẻ cùng anh.<br>
+        Chúc anh luôn bình an, hạnh phúc trọn đời.<br><br>Em thương anh 💌</p>
+        <small>Mở ra nhẹ thôi nha, tim rớt đó 💖</small>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const flap = document.getElementById('flap');
+    const letter = document.getElementById('letter');
+    let isOpen = false;
+
+    document.getElementById('envelope').addEventListener('click', () => {
+      if (!isOpen) {
+        // mở thư
+        flap.style.transition = 'all 0.5s ease';
+        flap.style.transform = 'translateY(-100%)';
+        flap.style.opacity = '0';
+        setTimeout(() => {
+          letter.style.transition = 'all 0.7s ease';
+          letter.style.bottom = '30px';
+          letter.style.opacity = '1';
+        }, 400);
+        isOpen = true;
+      } else {
+        // đóng thư lại
+        letter.style.transition = 'all 0.5s ease';
+        letter.style.bottom = '-170px';
+        letter.style.opacity = '0';
+        setTimeout(() => {
+          flap.style.transition = 'all 0.6s ease';
+          flap.style.transform = 'translateY(0)';
+          flap.style.opacity = '1';
+        }, 300);
+        isOpen = false;
+      }
+    });
+  </script>
+</body>
+</html>
