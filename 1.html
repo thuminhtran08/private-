@@ -89,28 +89,24 @@
     transform: translate(-50%, -50%);
     opacity: 0;
     transition: opacity 1.5s ease;
-    background: rgba(255, 200, 220, 0.3);
-    padding: 20px 30px;
-    border-radius: 20px;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    z-index: 60;
-    width: 85%;
-    max-width: 400px;
+    z-index: 70;
+    width: 80%;
+    max-width: 300px;
+    pointer-events: none;
   }
   .finalText.show { opacity: 1; }
   .finalText .main {
-    font-size: clamp(20px, 6vw, 34px);
+    font-size: clamp(18px, 5vw, 28px);
     font-weight: 800;
     color: #fff;
-    text-shadow: 0 0 12px rgba(255,100,160,0.8);
+    text-shadow: 0 2px 10px rgba(255,100,160,0.9);
     line-height: 1.3;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
   }
   .finalText .sub {
     color: #fff;
-    font-size: clamp(14px, 3.5vw, 18px);
-    text-shadow: 0 0 6px rgba(255,120,180,0.6);
+    font-size: clamp(12px, 3vw, 16px);
+    text-shadow: 0 2px 6px rgba(255,120,180,0.8);
     line-height: 1.4;
   }
 </style>
@@ -130,7 +126,7 @@
 <!-- Màn 2 -->
 <div id="screen2" class="screen hidden">
   <div id="finalText" class="finalText">
-    <div class="main">Happy Women's Day 💗</div>
+    <div class="main">Happy Women's Day</div>
     <div class="sub">Thanks for always being your beautiful, strong self.</div>
   </div>
 </div>
@@ -157,72 +153,77 @@ function fit() {
 
 fit();
 window.addEventListener("resize", fit);
-window.addEventListener("orientationchange", fit);
+window.addEventListener("orientationchange", function() {
+  setTimeout(fit, 100);
+});
 
-// --- nền hoa & tim rơi ---
+// --- nền hoa & tim rơi --- FIXED ---
 const bgParticles = [];
-const BG_COUNT = Math.round((window.innerWidth * window.innerHeight) / 90000 * 40);
+const BG_COUNT = Math.round((window.innerWidth * window.innerHeight) / 90000 * 25); // Giảm số lượng
 
 function spawnParticle() {
-  const type = Math.random() < 0.5 ? "petal" : "heart";
+  const type = Math.random() < 0.6 ? "petal" : "heart";
   return {
     x: Math.random() * window.innerWidth,
     y: Math.random() * window.innerHeight,
-    vx: (Math.random() - 0.5) * 0.5,
-    vy: 0.4 + Math.random() * 0.8,
-    size: 6 + Math.random() * 14,
+    vx: (Math.random() - 0.5) * 0.3, // Giảm tốc độ
+    vy: 0.3 + Math.random() * 0.5,
+    size: 4 + Math.random() * 10, // Nhỏ hơn
     rot: Math.random() * Math.PI * 2,
-    drot: (Math.random() - 0.5) * 0.02,
-    alpha: 0.6 + Math.random() * 0.4,
+    drot: (Math.random() - 0.5) * 0.01,
+    alpha: 0.4 + Math.random() * 0.3, // Trong suốt hơn
     type
   };
 }
+
 for (let i = 0; i < BG_COUNT; i++) bgParticles.push(spawnParticle());
 
 function drawBg(dt) {
   bgCtx.clearRect(0, 0, window.innerWidth, window.innerHeight);
   for (let p of bgParticles) {
-    p.x += p.vx * dt * 0.06;
-    p.y += p.vy * dt * 0.06;
-    p.rot += p.drot * dt * 0.06;
+    p.x += p.vx;
+    p.y += p.vy;
+    p.rot += p.drot;
     bgCtx.save();
     bgCtx.globalAlpha = p.alpha;
     bgCtx.translate(p.x, p.y);
     bgCtx.rotate(p.rot);
     if (p.type === "petal") {
-      bgCtx.fillStyle = "rgba(255,200,220,0.8)";
+      bgCtx.fillStyle = "rgba(255,200,220,0.6)";
       bgCtx.beginPath();
-      bgCtx.ellipse(0, 0, p.size * 0.5, p.size, 0, 0, Math.PI * 2);
+      bgCtx.ellipse(0, 0, p.size * 0.4, p.size * 0.8, 0, 0, Math.PI * 2);
       bgCtx.fill();
     } else {
-      bgCtx.scale(p.size / 12, p.size / 12);
+      bgCtx.scale(p.size / 15, p.size / 15);
       bgCtx.beginPath();
       bgCtx.moveTo(0, 0);
-      bgCtx.bezierCurveTo(0, -6, -5, -14, -12, -14);
-      bgCtx.bezierCurveTo(-25, -14, -25, 6, 0, 20);
-      bgCtx.bezierCurveTo(25, 6, 25, -14, 12, -14);
-      bgCtx.bezierCurveTo(5, -14, 0, -6, 0, 0);
-      bgCtx.fillStyle = "rgba(255,120,160,0.7)";
+      bgCtx.bezierCurveTo(0, -4, -3, -9, -8, -9);
+      bgCtx.bezierCurveTo(-16, -9, -16, 4, 0, 13);
+      bgCtx.bezierCurveTo(16, 4, 16, -9, 8, -9);
+      bgCtx.bezierCurveTo(3, -9, 0, -4, 0, 0);
+      bgCtx.fillStyle = "rgba(255,120,160,0.5)";
       bgCtx.fill();
     }
     bgCtx.restore();
-    if (p.y > window.innerHeight + 30) {
+    if (p.y > window.innerHeight + 30 || p.x < -30 || p.x > window.innerWidth + 30) {
       p.x = Math.random() * window.innerWidth;
       p.y = -20;
     }
   }
 }
 
-// --- tim ghép ---
+// --- tim ghép - IMPROVED ---
 let assembling = false, assembled = false, assembleParticles = [];
+let heartBeatPhase = 0;
 
-function heartPoints(cx, cy, s, count = 250) {
+// Tạo hình tim mảnh mai hơn
+function heartPoints(cx, cy, s, count = 300) {
   const pts = [];
   for (let i = 0; i < count; i++) {
     const t = Math.PI * 2 * (i / count);
     const x = 16 * Math.pow(Math.sin(t), 3);
-    const y = 13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t);
-    pts.push({x: cx + x * s, y: cy - y * s});
+    const y = -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
+    pts.push({x: cx + x * s * 0.8, y: cy + y * s * 0.8}); // Nhỏ hơn, mảnh hơn
   }
   return pts;
 }
@@ -230,55 +231,121 @@ function heartPoints(cx, cy, s, count = 250) {
 function startAssemble() {
   assembleParticles = [];
   const cx = window.innerWidth / 2, cy = window.innerHeight / 2;
-  const s = Math.min(window.innerWidth, window.innerHeight) / 35;
+  const s = Math.min(window.innerWidth, window.innerHeight) / 50; // Nhỏ hơn
   const pts = heartPoints(cx, cy, s);
+  
   for (let pt of pts) {
+    const angle = Math.random() * Math.PI * 2;
+    const distance = 100 + Math.random() * 200;
+    const startX = cx + Math.cos(angle) * distance;
+    const startY = cy + Math.sin(angle) * distance;
+    
     assembleParticles.push({
-      x: Math.random() * window.innerWidth,
-      y: window.innerHeight + Math.random() * 200,
-      tx: pt.x, ty: pt.y,
-      vx: 0, vy: 0,
-      size: 5 + Math.random() * 6,
-      hue: 320 + Math.random() * 30,
-      alpha: 0.9
+      x: startX,
+      y: startY,
+      tx: pt.x, 
+      ty: pt.y,
+      vx: 0, 
+      vy: 0,
+      size: 2 + Math.random() * 3, // Nhỏ hơn
+      hue: 330 + Math.random() * 20,
+      alpha: 0.8 + Math.random() * 0.2,
+      delay: Math.random() * 1000
     });
   }
   assembling = true;
+  heartBeatPhase = 0;
 }
 
 function drawAssemble(dt) {
   if (!assembling) return;
+  
   let done = true;
+  const currentTime = Date.now();
+  
   for (let p of assembleParticles) {
-    p.vx += (p.tx - p.x) * 0.05;
-    p.vy += (p.ty - p.y) * 0.05;
-    p.vx *= 0.88; p.vy *= 0.88;
-    p.x += p.vx * dt * 0.06;
-    p.y += p.vy * dt * 0.06;
+    if (currentTime < p.delay) continue;
+    
+    const dx = p.tx - p.x;
+    const dy = p.ty - p.y;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    
+    if (dist > 2) {
+      done = false;
+      p.vx += dx * 0.08;
+      p.vy += dy * 0.08;
+      p.vx *= 0.85;
+      p.vy *= 0.85;
+      p.x += p.vx;
+      p.y += p.vy;
+    }
+    
     mCtx.save();
     mCtx.globalAlpha = p.alpha;
-    mCtx.translate(p.x, p.y);
-    mCtx.scale(p.size / 12, p.size / 12);
+    mCtx.fillStyle = `hsla(${p.hue}, 85%, 65%, 0.9)`;
     mCtx.beginPath();
-    mCtx.moveTo(0, 0);
-    mCtx.bezierCurveTo(0, -6, -5, -14, -12, -14);
-    mCtx.bezierCurveTo(-25, -14, -25, 6, 0, 20);
-    mCtx.bezierCurveTo(25, 6, 25, -14, 12, -14);
-    mCtx.bezierCurveTo(5, -14, 0, -6, 0, 0);
-    mCtx.fillStyle = `hsl(${p.hue}, 80%, 70%)`;
+    mCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
     mCtx.fill();
     mCtx.restore();
-    if (Math.hypot(p.x - p.tx, p.y - p.ty) > 3) done = false;
   }
-  if (done && !assembled) assembled = true;
+  
+  if (done && !assembled) {
+    assembled = true;
+    startHeartBeat();
+  }
 }
 
+// Hiệu ứng tim đập
+function startHeartBeat() {
+  heartBeatPhase = 0;
+  animateHeartBeat();
+}
+
+function animateHeartBeat() {
+  if (!assembled) return;
+  
+  heartBeatPhase += 0.05;
+  const scale = 1 + Math.sin(heartBeatPhase) * 0.05;
+  
+  mCtx.save();
+  mCtx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+  
+  // Vẽ lại các hạt với hiệu ứng đập
+  const cx = window.innerWidth / 2, cy = window.innerHeight / 2;
+  
+  for (let p of assembleParticles) {
+    const dx = p.x - cx;
+    const dy = p.y - cy;
+    const newX = cx + dx * scale;
+    const newY = cy + dy * scale;
+    
+    mCtx.save();
+    mCtx.globalAlpha = p.alpha;
+    mCtx.fillStyle = `hsla(${p.hue}, 85%, 65%, 0.9)`;
+    mCtx.beginPath();
+    mCtx.arc(newX, newY, p.size, 0, Math.PI * 2);
+    mCtx.fill();
+    mCtx.restore();
+  }
+  
+  mCtx.restore();
+  
+  if (assembled) {
+    requestAnimationFrame(animateHeartBeat);
+  }
+}
+
+// Animation loop chính
 let last = performance.now();
 function loop(now) {
-  const dt = now - last; last = now;
+  const dt = now - last; 
+  last = now;
+  
   drawBg(dt);
-  mCtx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-  drawAssemble(dt);
+  if (!assembled) {
+    drawAssemble(dt);
+  }
+  
   requestAnimationFrame(loop);
 }
 requestAnimationFrame(loop);
@@ -294,21 +361,31 @@ function handleClick() {
     screen1.style.display = "none";
     screen2.style.display = "flex";
     screen2.classList.remove("hidden");
-    setTimeout(startAssemble, 500);
+    setTimeout(startAssemble, 300);
+    
     const timer = setInterval(() => {
       if (assembled) { 
-        finalText.classList.add("show"); 
+        setTimeout(() => {
+          finalText.classList.add("show");
+        }, 500);
         clearInterval(timer); 
       }
-    }, 200);
-  }, 700);
+    }, 100);
+  }, 500);
 }
 
-// Sử dụng cả touch và click để tương thích tốt hơn
+// Event listeners
 cta.addEventListener("click", handleClick);
 cta.addEventListener("touchend", function(e) {
   e.preventDefault();
   handleClick();
+});
+
+// Preload để tránh giật
+window.addEventListener('load', function() {
+  setTimeout(() => {
+    document.body.style.opacity = '1';
+  }, 100);
 });
 </script>
 
