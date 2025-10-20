@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title> Gửi dấu iu cụa em 💌</title>
+<style>
+  body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #fff8fa;
+    overflow: hidden;
+    font-family: 'Poppins', sans-serif;
+  }
+
+  .envelope {
+    position: relative;
+    width: 280px;
+    height: 190px;
+    background: linear-gradient(180deg, #ffdce8, #ffe7f0);
+    border-radius: 16px;
+    box-shadow: 0 12px 28px rgba(255, 160, 190, 0.4);
+    cursor: pointer;
+    transition: transform 0.4s ease;
+  }
+
+  .envelope:hover {
+    transform: scale(1.05);
+  }
+
+  /* --- NẮP THƯ --- */
+  .flap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-left: 140px solid transparent;
+    border-right: 140px solid transparent;
+    border-bottom: 90px solid #ffcadd;
+    border-radius: 10px;
+    transform-origin: top;
+    transition: transform 0.8s ease;
+  }
+
+  .envelope.open .flap {
+    transform: rotateX(180deg);
+  }
+
+  /* --- LÁ THƯ BÊN TRONG --- */
+  .letter {
+    position: absolute;
+    top: 35px;
+    left: 15px;
+    width: 250px;
+    background: #fff;
+    border-radius: 12px;
+    border: 1.5px solid #ffd2e1;
+    padding: 18px 20px;
+    box-shadow: 0 4px 14px rgba(255, 180, 200, 0.35);
+    opacity: 0;
+    transform: translateY(80px);
+    transition: all 1.2s ease;
+    overflow: visible;
+  }
+
+  .letter.show {
+    opacity: 1;
+    transform: translateY(-5px);
+    animation: glow 2s ease-in-out infinite alternate;
+  }
+
+  @keyframes glow {
+    0% { box-shadow: 0 0 12px rgba(255, 170, 200, 0.4); }
+    100% { box-shadow: 0 0 24px rgba(255, 190, 220, 0.7); }
+  }
+
+  .message {
+    font-size: 15px;
+    line-height: 1.7;
+    color: #444;
+    text-align: justify;
+  }
+
+  .signature {
+    margin-top: 12px;
+    text-align: right;
+    font-style: italic;
+    color: #ff5c8a;
+    font-weight: 500;
+  }
+
+  /* Con dấu trái tim */
+  .seal {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    font-size: 24px;
+    color: #ff5c8a;
+  }
+
+  /* --- HIỆU ỨNG TIM BAY --- */
+  .heart {
+    position: absolute;
+    font-size: 20px;
+    animation: floatUp 4s ease-in infinite;
+    opacity: 0;
+    z-index: 10;
+  }
+
+  @keyframes floatUp {
+    0% { transform: translateY(0) scale(1); opacity: 1; }
+    100% { transform: translateY(-900px) scale(0.6); opacity: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="envelope" id="envelope">
+  <div class="flap"></div>
+  <div class="letter" id="letter">
+    <div class="message">
+        Gửi anh yêu dấu 💌<br>
+     Khi anh bước qua em lần đầu, cuộc đời em đã trật khỏi quỹ đạo ,Từ giây phút ấy em biết mình “ôi thôi chết”, lần này em dính vào tình yêu thật rồi 💗<br>
+     Em yêu anh, cảm ơn anh, và luôn tự hào về anh , dù ntn em rất mong anh hãy chia cho em một nửa của anh niềm vui, nỗi buồn , hỉ nộ ái ố em rất mong anh có thể chia sẻ cùng em ạ   
+     🌷<br>
+      <span class="signature"> Minh Thư Trần  💖</span>
+    </div>
+  </div>
+  <div class="seal">💞</div>
+</div>
+
+<script>
+  const envelope = document.getElementById("envelope");
+  const letter = document.getElementById("letter");
+
+  envelope.addEventListener("click", () => {
+    envelope.classList.toggle("open");
+    setTimeout(() => {
+      letter.classList.toggle("show");
+    }, 700);
+
+    // tạo hiệu ứng tim bay dày hơn và mềm hơn
+    for (let i = 0; i < 60; i++) {
+      const heart = document.createElement("div");
+      heart.classList.add("heart");
+      heart.innerHTML = ["💗","💖","💕","💞"][Math.floor(Math.random() * 4)];
+      document.body.appendChild(heart);
+
+      const x = Math.random() * window.innerWidth;
+      const size = Math.random() * 24 + 10;
+      const duration = Math.random() * 2 + 4;
+      const delay = Math.random() * 1;
+
+      heart.style.left = `${x}px`;
+      heart.style.fontSize = `${size}px`;
+      heart.style.animationDuration = `${duration}s`;
+      heart.style.animationDelay = `${delay}s`;
+
+      setTimeout(() => {
+        heart.remove();
+      }, duration * 1000);
+    }
+  });
+</script>
+
+</body>
+</html>
