@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
 <title>Gửi các tình yêu 💗</title>
 
 <!-- Import font Poppins -->
@@ -15,76 +15,103 @@
     --accent: #ff4f81;
   }
 
+  * {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+  }
+
   html, body {
     height: 100%;
     margin: 0;
+    padding: 0;
     overflow: hidden;
-    font-family: "Poppins", system-ui, Arial;
+    font-family: "Poppins", system-ui, Arial, sans-serif;
     background: linear-gradient(180deg, var(--bg1), var(--bg2));
+    -webkit-text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
   }
 
   canvas {
     position: absolute;
-    inset: 0;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     display: block;
+    touch-action: none;
   }
 
   .screen {
     position: absolute;
-    inset: 0;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: opacity .8s ease, transform .8s ease;
   }
-  .hidden { opacity: 0; pointer-events: none; transform: scale(.98); }
+  .hidden { 
+    opacity: 0; 
+    pointer-events: none; 
+    transform: scale(.98); 
+  }
 
   .centerText {
     position: absolute;
     z-index: 50;
     text-align: center;
-    padding: 20px 36px;
+    padding: 16px 28px;
     border-radius: 999px;
     border: 2px solid rgba(255,100,150,0.14);
-    background: rgba(255,255,255,0.85);
+    background: rgba(255,255,255,0.92);
     box-shadow: 0 14px 40px rgba(255,120,160,0.1);
     cursor: pointer;
     transition: transform .15s ease;
+    max-width: 90%;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
   }
-  .centerText:hover { transform: scale(1.05); }
+  .centerText:active { transform: scale(0.98); }
   .centerText .title {
-    font-size: clamp(22px, 4vw, 36px);
+    font-size: clamp(20px, 5vw, 32px);
     color: var(--accent);
     font-weight: 800;
+    line-height: 1.2;
   }
 
   .finalText {
     position: absolute;
-    text-align:center;
-    left:50%; top:50%;
-    transform: translate(-50%,-50%);
-    opacity:0;
+    text-align: center;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
     transition: opacity 1.5s ease;
-    background: rgba(255, 200, 220, 0.25);
-    padding: 16px 32px; 
+    background: rgba(255, 200, 220, 0.3);
+    padding: 20px 30px;
     border-radius: 20px;
-    backdrop-filter: blur(8px);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     z-index: 60;
+    width: 85%;
+    max-width: 400px;
   }
-  .finalText.show { opacity:1; }
+  .finalText.show { opacity: 1; }
   .finalText .main {
-    font-size: clamp(22px,5vw,38px); 
-    font-weight:800;
-    color:#fff; 
+    font-size: clamp(20px, 6vw, 34px);
+    font-weight: 800;
+    color: #fff;
     text-shadow: 0 0 12px rgba(255,100,160,0.8);
+    line-height: 1.3;
+    margin-bottom: 8px;
   }
   .finalText .sub {
-    margin-top:6px; 
-    color:#fff;
-    font-size: clamp(14px,3vw,20px);
-    text-shadow:0 0 6px rgba(255,120,180,0.6);
+    color: #fff;
+    font-size: clamp(14px, 3.5vw, 18px);
+    text-shadow: 0 0 6px rgba(255,120,180,0.6);
+    line-height: 1.4;
   }
 </style>
 </head>
@@ -96,7 +123,7 @@
 <!-- Màn 1 -->
 <div id="screen1" class="screen">
   <div class="centerText" id="cta">
-    <div class="title">For my love  💗</div>
+    <div class="title">For my love 💗</div>
   </div>
 </div>
 
@@ -116,25 +143,31 @@ const mCtx = mainCanvas.getContext("2d");
 
 function fit() {
   const DPR = window.devicePixelRatio || 1;
-  bgCanvas.width = innerWidth * DPR;
-  bgCanvas.height = innerHeight * DPR;
-  mainCanvas.width = innerWidth * DPR;
-  mainCanvas.height = innerHeight * DPR;
-  bgCtx.setTransform(DPR, 0, 0, DPR, 0, 0);
-  mCtx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  const width = window.innerWidth;
+  const height = window.innerHeight;
+  
+  bgCanvas.width = width * DPR;
+  bgCanvas.height = height * DPR;
+  mainCanvas.width = width * DPR;
+  mainCanvas.height = height * DPR;
+  
+  bgCtx.scale(DPR, DPR);
+  mCtx.scale(DPR, DPR);
 }
+
 fit();
 window.addEventListener("resize", fit);
+window.addEventListener("orientationchange", fit);
 
 // --- nền hoa & tim rơi ---
 const bgParticles = [];
-const BG_COUNT = Math.round((innerWidth * innerHeight) / 90000 * 60);
+const BG_COUNT = Math.round((window.innerWidth * window.innerHeight) / 90000 * 40);
 
 function spawnParticle() {
   const type = Math.random() < 0.5 ? "petal" : "heart";
   return {
-    x: Math.random() * innerWidth,
-    y: Math.random() * innerHeight,
+    x: Math.random() * window.innerWidth,
+    y: Math.random() * window.innerHeight,
     vx: (Math.random() - 0.5) * 0.5,
     vy: 0.4 + Math.random() * 0.8,
     size: 6 + Math.random() * 14,
@@ -147,7 +180,7 @@ function spawnParticle() {
 for (let i = 0; i < BG_COUNT; i++) bgParticles.push(spawnParticle());
 
 function drawBg(dt) {
-  bgCtx.clearRect(0, 0, innerWidth, innerHeight);
+  bgCtx.clearRect(0, 0, window.innerWidth, window.innerHeight);
   for (let p of bgParticles) {
     p.x += p.vx * dt * 0.06;
     p.y += p.vy * dt * 0.06;
@@ -173,8 +206,8 @@ function drawBg(dt) {
       bgCtx.fill();
     }
     bgCtx.restore();
-    if (p.y > innerHeight + 30) {
-      p.x = Math.random() * innerWidth;
+    if (p.y > window.innerHeight + 30) {
+      p.x = Math.random() * window.innerWidth;
       p.y = -20;
     }
   }
@@ -196,13 +229,13 @@ function heartPoints(cx, cy, s, count = 250) {
 
 function startAssemble() {
   assembleParticles = [];
-  const cx = innerWidth / 2, cy = innerHeight / 2;
-  const s = Math.min(innerWidth, innerHeight) / 35;
+  const cx = window.innerWidth / 2, cy = window.innerHeight / 2;
+  const s = Math.min(window.innerWidth, window.innerHeight) / 35;
   const pts = heartPoints(cx, cy, s);
   for (let pt of pts) {
     assembleParticles.push({
-      x: Math.random() * innerWidth,
-      y: innerHeight + Math.random() * 200,
+      x: Math.random() * window.innerWidth,
+      y: window.innerHeight + Math.random() * 200,
       tx: pt.x, ty: pt.y,
       vx: 0, vy: 0,
       size: 5 + Math.random() * 6,
@@ -244,7 +277,7 @@ let last = performance.now();
 function loop(now) {
   const dt = now - last; last = now;
   drawBg(dt);
-  mCtx.clearRect(0, 0, innerWidth, innerHeight);
+  mCtx.clearRect(0, 0, window.innerWidth, window.innerHeight);
   drawAssemble(dt);
   requestAnimationFrame(loop);
 }
@@ -255,7 +288,7 @@ const screen2 = document.getElementById("screen2");
 const cta = document.getElementById("cta");
 const finalText = document.getElementById("finalText");
 
-cta.addEventListener("click", () => {
+function handleClick() {
   screen1.classList.add("hidden");
   setTimeout(() => {
     screen1.style.display = "none";
@@ -269,6 +302,13 @@ cta.addEventListener("click", () => {
       }
     }, 200);
   }, 700);
+}
+
+// Sử dụng cả touch và click để tương thích tốt hơn
+cta.addEventListener("click", handleClick);
+cta.addEventListener("touchend", function(e) {
+  e.preventDefault();
+  handleClick();
 });
 </script>
 
