@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title> M </title>
+
+<style>
+    body {
+        background: #f5f5f0;
+        font-family: "Georgia", serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 20px;
+    }
+
+    .container {
+        text-align: center;
+        width: 100%;
+        max-width: 1200px;
+    }
+
+    /* PHONG THƯ */
+    .envelope {
+        width: 500px;
+        max-width: 90vw;
+        background: #fff;
+        padding: 50px 30px;
+        border-radius: 12px;
+        border: 10px solid transparent;
+        border-image: repeating-linear-gradient(45deg, #d9534f 0 15px, #5bc0de 15px 30px) 10;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        cursor: pointer;
+        transition: 0.3s;
+        margin: 0 auto;
+    }
+
+    .envelope:hover {
+        transform: translateY(-5px);
+    }
+
+    .header-text {
+        display: flex;
+        justify-content: space-between;
+        font-size: 16px;
+        margin-bottom: 20px;
+        color: #444;
+    }
+
+    .title {
+        font-size: 36px;
+        font-weight: bold;
+        color: #c0392b;
+        margin-bottom: 5px;
+    }
+
+    .subtitle {
+        font-size: 16px;
+        color: #555;
+    }
+
+    .stamp {
+        width: 60px;
+        height: 60px;
+        border: 2px dashed #b23;
+        border-radius: 8px;
+        font-size: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-left: auto;
+        margin-top: 15px;
+        transform: rotate(15deg);
+        color: #b23;
+    }
+
+    /* LÁ THƯ */
+    #letter {
+        width: 480px;
+        max-width: 90vw;
+        height: 600px;
+        background: #fdf6e3;
+        padding: 40px;
+        margin: 20px auto 0 auto;
+        border-radius: 12px;
+        border: 2px solid #d5c6a1;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        display: none;
+        text-align: left;
+        line-height: 1.8;
+        color: #3b2f25;
+        position: relative;
+        overflow-y: auto;
+        font-family: "Times New Roman", serif;
+    }
+
+    #letter::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    #letter::-webkit-scrollbar-thumb {
+        background: #d5c6a1;
+        border-radius: 4px;
+    }
+
+    #letter::-webkit-scrollbar-track {
+        background: #fdf6e3;
+    }
+
+    #letter .date {
+        text-align: right;
+        font-style: italic;
+        margin-bottom: 20px;
+        font-size: 16px;
+    }
+
+    .footer {
+        text-align: right;
+        font-style: italic;
+        font-size: 18px;
+        margin-top: 20px;
+    }
+
+    .instructions {
+        margin-top: 20px;
+        color: #777;
+    }
+
+    /* EMOJI RƠI */
+    @keyframes fall {
+        0% { transform: translateY(-50px); opacity: 1; }
+        100% { transform: translateY(600px); opacity: 0; }
+    }
+
+    .emoji {
+        position: fixed;
+        top: -50px;
+        font-size: 30px;
+        pointer-events: none;
+        animation: fall 2s linear forwards;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- PHONG THƯ -->
+    <div class="envelope" id="envelope" onclick="openLetter()">
+        <div class="header-text">
+        <span>GUI: DUC MINH</span>
+            <span>TU: MINH THU TRAN</span>
+        <br>
+        <br>
+        </div>
+        <br>
+        <div class="title">Every love story is beautiful, but ours is my favorite  </div>
+        <br>
+        <br>
+        <br>
+        <div class="subtitle"> that long ma noi <br> nang mua cung khong muon de anh mot minh  </div>
+
+        <div class="stamp">TEM WTH</div>
+    </div>
+
+    <!-- LÁ THƯ -->
+    <div id="letter" onclick="closeLetter()">
+        <div class="date">Hà Nội, ngày 19/11/2025</div>
+
+        <p>Gửi anh,</p>
+        <p>Mong anh hay luôn giữ gìn sức khỏe , đi đường an toàn về nhà cẩn thận ,và có những giấc ngủ ngon </p>
+        <p>Mong cuộc đời đối xử nhẹ nhàng với anh , mong những ước nguyện của anh dù lớn hay nhỏ sẽ dần dần thành hiện thực  </p>
+        <p>Nếu có những ngày không vui xinh anh đừng buồn lâu quá ,đừng quên ăn uống đầy đủ ,đừng tắm khuya </p>
+        <p>Nhớ nhé!</p>
+
+        <div class="footer">
+            Áng mây trôi dạt trên bầu trời cao ... để rồi hóa thành mưa . Những giọt nước đọng lại trên lá mong muốn được năng ấm ôm vào lòng<br><br>
+            <strong>Thu Minh Tran </strong>
+        </div>
+    </div>
+
+    <p class="instructions" id="instructions"> ? </p>
+
+</div>
+
+<script>
+    function openLetter() {
+        document.getElementById("envelope").style.display = "none";
+        const letter = document.getElementById("letter");
+        letter.style.display = "block";
+        document.getElementById("instructions").textContent = "? ";
+
+        emojiRain();
+    }
+
+    function closeLetter() {
+        document.getElementById("letter").style.display = "none";
+        document.getElementById("envelope").style.display = "block";
+        document.getElementById("instructions").textContent = "?";
+    }
+
+    function emojiRain() {
+        const emojis = ["🌸🌸🌺", "🌸🌸🌺", "🌸🌺🌸🌺", "🌸🌺🌸🌺", "🌸🌸🌺🌸🌺", "💕🌸🌸🌺🌸🌺", "🌟🌸", "🌸", "🌸"];
+        for (let i = 0; i < 20; i++) {
+            let span = document.createElement("span");
+            span.classList.add("emoji");
+            span.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+            span.style.left = Math.random() * 100 + "vw";
+            span.style.animationDuration = (2 + Math.random() * 1.5) + "s";
+            document.body.appendChild(span);
+
+            setTimeout(() => { span.remove(); }, 3500);
+        }
+    }
+</script>
+
+</body>
+</html>
